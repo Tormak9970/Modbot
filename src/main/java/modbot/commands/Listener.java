@@ -1,8 +1,8 @@
 package modbot.commands;
 
 import modbot.CommandManager;
-import modbot.commands.moderation.bannedWords.GetBannedWordsCommand;
-import modbot.commands.roles.JoinRolesCommand;
+import modbot.commands.moderation.bannedWords.GetBannedWordsCommandInterface;
+import modbot.commands.roles.JoinRolesCommandInterface;
 import modbot.commands.roles.ReactionRolesCommand;
 import modbot.utils.ReactionRoles;
 import modbot.utils.Utils;
@@ -33,8 +33,8 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
-        List<String> badWords = GetBannedWordsCommand.getListOfBannedWords(event.getGuild().getIdLong());
+        String prefix = SetPrefixCommandInterface.getPrefix(event.getGuild().getIdLong());
+        List<String> badWords = GetBannedWordsCommandInterface.getListOfBannedWords(event.getGuild().getIdLong());
         System.out.println("We received a message from " +
                 event.getAuthor().getName() + ": " +
                 event.getMessage().getContentDisplay()
@@ -58,7 +58,7 @@ public class Listener extends ListenerAdapter {
         String raw = event.getMessage().getContentRaw();
 
         if (raw.startsWith(prefix)) {
-            manager.handle(event);
+            manager.handle(event, waiter);
         }
     }
 
@@ -86,7 +86,7 @@ public class Listener extends ListenerAdapter {
         }
         Guild guild = joinEvent.getGuild();
         long guildID = guild.getIdLong();
-        List<Long> joinRoles = JoinRolesCommand.getListOfJoinRoles(guildID);
+        List<Long> joinRoles = JoinRolesCommandInterface.getListOfJoinRoles(guildID);
 
         if(joinRoles.size() > 0){
             for (Long roleId : joinRoles) {

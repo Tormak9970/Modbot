@@ -5,11 +5,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
-public class HelpCommand implements ICommand {
+public class HelpCommandInterface implements CommandInterface {
 
     private CommandManager manager;
 
-    public HelpCommand(CommandManager manager) {
+    public HelpCommandInterface(CommandManager manager) {
         this.manager = manager;
     }
 
@@ -24,8 +24,8 @@ public class HelpCommand implements ICommand {
 
             builder.append("List of commands\n");
 
-            manager.getCommandsList().stream().map(ICommand::getName).forEach(
-                    (it) -> builder.append('`').append(SetPrefixCommand.getPrefix(id)).append(it).append("`\n")
+            manager.getCommandsList().stream().map(CommandInterface::getName).forEach(
+                    (it) -> builder.append('`').append(SetPrefixCommandInterface.getPrefix(id)).append(it).append("`\n")
             );
 
             channel.sendMessage(builder.toString()).queue();
@@ -33,7 +33,7 @@ public class HelpCommand implements ICommand {
         }
 
         String search = args.get(0);
-        ICommand command = manager.getCommand(search);
+        CommandInterface command = manager.getCommand(search);
 
         if (command == null) {
             channel.sendMessage("Nothing found for " + search).queue();

@@ -1,13 +1,12 @@
 package modbot.commands.roles;
 
 import modbot.database.DatabaseManager;
-import modbot.commands.SetPrefixCommand;
+import modbot.commands.SetPrefixCommandInterface;
 import modbot.utils.ReactionRoles;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -65,7 +64,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "reactionroles"))
+        if (content.equals(SetPrefixCommandInterface.getPrefix(event.getGuild().getIdLong()) + "reactionroles"))
         {
             TextChannel channel = event.getChannel();
             Guild guild = event.getGuild();

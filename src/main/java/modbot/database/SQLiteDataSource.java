@@ -1,6 +1,6 @@
 package modbot.database;
 
-import modbot.commands.SetPrefixCommand;
+import modbot.commands.SetPrefixCommandInterface;
 import modbot.utils.ReactionRoles;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -11,12 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static jdk.nashorn.internal.runtime.regexp.joni.Syntax.Java;
 
 public class SQLiteDataSource implements DatabaseManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDataSource.class);
@@ -46,7 +41,7 @@ public class SQLiteDataSource implements DatabaseManager {
         ds = new HikariDataSource(config);
 
         try (final Statement statement = getConnection().createStatement()) {
-            final String defaultPrefix = SetPrefixCommand.getDefaultPrefix();
+            final String defaultPrefix = SetPrefixCommandInterface.getDefaultPrefix();
 
             // language=SQLite
             statement.execute("CREATE TABLE IF NOT EXISTS guild_settings(" +
@@ -113,7 +108,7 @@ public class SQLiteDataSource implements DatabaseManager {
             e.printStackTrace();
         }
 
-        return SetPrefixCommand.getDefaultPrefix();
+        return SetPrefixCommandInterface.getDefaultPrefix();
     }
 
 

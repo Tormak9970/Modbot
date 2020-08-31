@@ -1,12 +1,11 @@
 package modbot.commands.roles;
 
 import modbot.commands.CommandContext;
-import modbot.commands.ICommand;
+import modbot.commands.CommandInterface;
 import modbot.database.DatabaseManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
@@ -17,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JoinRolesCommand implements ICommand {
+public class JoinRolesCommandInterface implements CommandInterface {
     private static long roleID;
     private static Map<Long, List<Long>> listOfJoinRoles = new HashMap<>();
 
@@ -59,12 +58,12 @@ public class JoinRolesCommand implements ICommand {
 
     @Override
     public String getName() {
-        return "joinRole";
+        return "joinrole";
     }
 
     @Override
     public String getHelp() {
-        return "adds a role given to users upon joining the server";
+        return "adds a role given to users upon joining the server\n" + "Usage: $joinrole [@mention role]";
     }
 }
 

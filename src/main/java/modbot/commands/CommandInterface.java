@@ -1,6 +1,6 @@
 package modbot.commands;
 
-public interface ICommand {
+public interface CommandInterface {
     void handle(CommandContext ctx);
 
     String getName();

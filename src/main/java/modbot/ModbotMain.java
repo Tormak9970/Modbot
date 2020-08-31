@@ -11,11 +11,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 
 public class ModbotMain {
 
-    public static void main(String[] args) throws LoginException, IOException, SQLException {
+    public static void main(String[] args) throws LoginException, IOException {
         String token;
 
         InputStream in = ModbotMain.class.getClassLoader().getResourceAsStream("token.txt");
@@ -29,9 +28,5 @@ public class ModbotMain {
                 .addEventListeners(new ReactionRolesCommand(waiter))
                 .addEventListeners(new Listener(waiter))
                 .build();
-
-
-
-
     }
 }
