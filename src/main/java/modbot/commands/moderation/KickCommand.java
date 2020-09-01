@@ -1,21 +1,12 @@
 package modbot.commands.moderation;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import modbot.commands.CommandContext;
 import modbot.commands.CommandInterface;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.sharding.ShardManager;
-
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class KickCommand implements CommandInterface {
-
-    private static EventWaiter waiter;
-    private static long guildID;
-    private static long setup;
 
     @Override
     public void handle(CommandContext ctx) {
@@ -59,31 +50,6 @@ public class KickCommand implements CommandInterface {
                 );
     }
 
-    private static void initWaiter(ShardManager shardManager, String reason, long memberID){
-        waiter.waitForEvent(
-                GuildMessageReceivedEvent.class,
-                (event) -> {
-                    User user = event.getAuthor();
-                    boolean isYes = event.getMessage().getContentRaw().equals("yes");
-
-                    return !user.isBot() && isYes && event.getChannel().getIdLong() == setup && event.getGuild().getIdLong() == guildID;
-                },
-                (event) -> {
-                    Member toKick = event.getGuild().getMemberById(memberID);
-
-                    toKick.kick(reason).queue();
-
-                    MessageChannel channel = event.getChannel();
-                    channel.sendMessage(toKick.getEffectiveName() + " has been muted for " + reason).queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
-                },
-                30, TimeUnit.SECONDS,
-                () -> {
-                    TextChannel textChannel = shardManager.getTextChannelById(setup);
-                    textChannel.sendMessage("Your response has timed out due to un responsiveness. please restart.").queue();
-                }
-        );
-    }
-
     @Override
     public String getName() {
         return "kick";
@@ -91,6 +57,6 @@ public class KickCommand implements CommandInterface {
 
     @Override
     public String getHelp() {
-        return "kicks specified user from server\n" + "Usage: $kick [user]";
+        return "kicks specified user from server\n" + "Usage: $kick [@mention]";
     }
 }

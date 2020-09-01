@@ -34,7 +34,7 @@ public class CommandManager {
         addCommand(new BanWordCommandInterface());
         addCommand(new RemoveBannedWord());
         addCommand(new MuteCommand());
-        //addCommand(new BanCommand());
+        addCommand(new BanCommand());
         addCommand(new KickCommand());
         addCommand(new BotInfoCommand());
         addCommand(new ServerInfoCommand());
