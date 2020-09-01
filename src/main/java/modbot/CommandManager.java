@@ -5,6 +5,9 @@ import modbot.commands.CommandContext;
 import modbot.commands.HelpCommandInterface;
 import modbot.commands.CommandInterface;
 import modbot.commands.SetPrefixCommandInterface;
+import modbot.commands.info.BotInfoCommand;
+import modbot.commands.info.ServerInfoCommand;
+import modbot.commands.info.UserInfoCommand;
 import modbot.commands.moderation.BanCommand;
 import modbot.commands.moderation.KickCommand;
 import modbot.commands.moderation.MuteCommand;
@@ -31,8 +34,11 @@ public class CommandManager {
         addCommand(new BanWordCommandInterface());
         addCommand(new RemoveBannedWord());
         addCommand(new MuteCommand());
-        addCommand(new BanCommand());
+        //addCommand(new BanCommand());
         addCommand(new KickCommand());
+        addCommand(new BotInfoCommand());
+        addCommand(new ServerInfoCommand());
+        addCommand(new UserInfoCommand());
     }
 
     private void addCommand(CommandInterface cmd) {

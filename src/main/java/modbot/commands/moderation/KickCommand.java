@@ -19,44 +19,44 @@ public class KickCommand implements CommandInterface {
 
     @Override
     public void handle(CommandContext ctx) {
+        final TextChannel channel = ctx.getChannel();
+        final Message message = ctx.getMessage();
+        final Member member = ctx.getMember();
+        final List<String> args = ctx.getArgs();
 
-        Member member = ctx.getMember();
-        TextChannel channel = ctx.getChannel();
-        List<String> args = ctx.getArgs();
-        GuildMessageReceivedEvent event = ctx.getEvent();
-
-        if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            channel.sendMessage("You must have the Manage Server permission to use his command").queue();
+        if (args.size() < 2 || message.getMentionedMembers().isEmpty()) {
+            channel.sendMessage("Missing arguments").queue();
             return;
         }
 
-        if (args.isEmpty()) {
-            channel.sendMessage("Missing args").queue();
+        final Member target = message.getMentionedMembers().get(0);
+
+        if (member.getIdLong() == target.getIdLong()) {
+            channel.sendMessage("You gotta be pretty stupid to try and kick yourself").queue();
             return;
         }
 
-        waiter = ctx.getWaiter();
-        guildID = event.getGuild().getIdLong();
-        setup = event.getChannel().getIdLong();
-        Message message = event.getMessage();
-        String content = message.getContentRaw();
-        // getContentRaw() is an atomic getter
-        // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        String reason = "";
-        int numSpaces = args.size();
-        long memberID = 0;
-
-        memberID = event.getGuild().getMembersByEffectiveName(args.get(0), true).get(0).getIdLong();
-
-        if(numSpaces == 1){
-            event.getChannel().sendMessage("Please provide a reason").queue();
-        }else if(event.getAuthor().getIdLong() == memberID){
-            event.getChannel().sendMessage("You have got to be pretty stupid to try to kick yourself").queue();
-        }else if(numSpaces == 2){
-            reason = args.get(1);
-            event.getChannel().sendMessage("Are you sure you want to kick this person?").queue();
-            initWaiter(event.getJDA().getShardManager(), reason, memberID);
+        if (!member.canInteract(target) || !member.hasPermission(Permission.KICK_MEMBERS)) {
+            channel.sendMessage("You are missing permission to kick this member").queue();
+            return;
         }
+
+        final Member selfMember = ctx.getSelfMember();
+
+        if (!selfMember.canInteract(target) || !selfMember.hasPermission(Permission.KICK_MEMBERS)) {
+            channel.sendMessage("I am missing permissions to kick that member").queue();
+            return;
+        }
+
+        final String reason = String.join(" ", args.subList(1, args.size()));
+
+        ctx.getGuild()
+                .kick(target, reason)
+                .reason(reason)
+                .queue(
+                        (__) -> channel.sendMessage("Kick was successful").queue(),
+                        (error) -> channel.sendMessageFormat("Could not kick %s", error.getMessage()).queue()
+                );
     }
 
     private static void initWaiter(ShardManager shardManager, String reason, long memberID){
@@ -74,7 +74,7 @@ public class KickCommand implements CommandInterface {
                     toKick.kick(reason).queue();
 
                     MessageChannel channel = event.getChannel();
-                    //channel.sendMessage(toKick.getEffectiveName() + " has been muted for " + reason + " minutes").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                    channel.sendMessage(toKick.getEffectiveName() + " has been muted for " + reason).queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
                 },
                 30, TimeUnit.SECONDS,
                 () -> {

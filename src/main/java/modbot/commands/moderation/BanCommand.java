@@ -38,8 +38,6 @@ public class BanCommand implements CommandInterface {
         setup = event.getChannel().getIdLong();
         Message message = event.getMessage();
         String content = message.getContentRaw();
-        // getContentRaw() is an atomic getter
-        // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         String reason = "";
         int numSpaces = args.size();
         long memberID = 0;
@@ -75,7 +73,7 @@ public class BanCommand implements CommandInterface {
                     toBan.ban(delDays, reason).queue();
 
                     MessageChannel channel = event.getChannel();
-                    //channel.sendMessage(toBan.getEffectiveName() + " has been muted for " + reason + " minutes").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                    channel.sendMessage(toBan.getEffectiveName() + " has been banned for " + reason).queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
                 },
                 30, TimeUnit.SECONDS,
                 () -> {

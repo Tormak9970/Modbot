@@ -39,20 +39,15 @@ public class BotInfoCommand implements CommandInterface {
 
         String helpServerUrl = "https://discord.gg/4uUjsxA";
         String memberInfo = String.format(
-                "**Uptime**: %s\n**Code-Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Member since**: %s\n**Roles**: " + roles + "\n**Goal in Life**: overthrow the humans\n**Next Update**: " + update ,
+                "**Uptime**: %s\n**Code-Type**: Open Source(GitHub)\n**Developers**: Tormak\n**Member since**: %s\n**Roles**: " + roles + "\n**Goal in Life**: overthrow the humans\n**Next Update**: " + update ,
                 Utils.getUptime(),
                 guild.getMember(user).getTimeJoined().getMonth() + " " + guild.getMember(user).getTimeJoined().getDayOfMonth() + ", " + guild.getMember(user).getTimeJoined().getYear(),
                 helpServerUrl
         );
 
-        String desc = "inDev Bot is a discord bot that I started " +
-                "working on during the Corona virus pandemic. " +
-                "It can do a multitude of tasks including: " +
-                "Moderation, Reaction Roles, add prefixes to a " +
-                "username, play music, play rocket league mafia, " +
-                "and of course, send memes from r/dankmemes.";
-        String gitHubUrl = "https://github.com/Tormak9970/DiscordBot";
-        String inviteUrl = "https://discordapp.com/api/oauth2/authorize?client_id=643451410855362569&permissions=8&scope=bot";
+        String desc = "Think mee6, but no subscriptions";
+        String gitHubUrl = "https://github.com/Tormak9970/Modbot";
+        String inviteUrl = "https://discord.com/api/oauth2/authorize?client_id=749635340330991687&permissions=8&scope=bot";
 
 
         EmbedBuilder embed = EmbedUtils.defaultEmbed()
@@ -72,11 +67,11 @@ public class BotInfoCommand implements CommandInterface {
 
     @Override
     public String getName() {
-        return null;
+        return "botinfo";
     }
 
     @Override
     public String getHelp() {
-        return null;
+        return "gets info on this bot\n" + "Usage: $botinfo";
     }
 }
