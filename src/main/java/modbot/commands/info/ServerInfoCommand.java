@@ -40,7 +40,7 @@ public class ServerInfoCommand implements CommandInterface {
                 .setThumbnail(guild.getIconUrl())
                 .addField("General Info", generalInfo, false)
                 .addField("Role And Member Counts", memberInfo, false)
-                .setColor(new Color(179, 21, 214))
+                .setColor(new Color(232, 156, 14))
                 .setFooter("EPC serverInfo")
                 ;
 

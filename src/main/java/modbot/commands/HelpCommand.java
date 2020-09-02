@@ -5,11 +5,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
-public class HelpCommandInterface implements CommandInterface {
+public class HelpCommand implements CommandInterface {
 
     private CommandManager manager;
 
-    public HelpCommandInterface(CommandManager manager) {
+    public HelpCommand(CommandManager manager) {
         this.manager = manager;
     }
 
@@ -25,7 +25,7 @@ public class HelpCommandInterface implements CommandInterface {
             builder.append("List of commands\n");
 
             manager.getCommandsList().stream().map(CommandInterface::getName).forEach(
-                    (it) -> builder.append('`').append(SetPrefixCommandInterface.getPrefix(id)).append(it).append("`\n")
+                    (it) -> builder.append('`').append(SetPrefixCommand.getPrefix(id)).append(it).append("`\n")
             );
 
             channel.sendMessage(builder.toString()).queue();

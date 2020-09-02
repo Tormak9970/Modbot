@@ -1,6 +1,6 @@
 package modbot.database;
 
-import modbot.commands.SetPrefixCommandInterface;
+import modbot.commands.SetPrefixCommand;
 import modbot.utils.ReactionRoles;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -41,7 +41,7 @@ public class SQLiteDataSource implements DatabaseManager {
         ds = new HikariDataSource(config);
 
         try (final Statement statement = getConnection().createStatement()) {
-            final String defaultPrefix = SetPrefixCommandInterface.getDefaultPrefix();
+            final String defaultPrefix = SetPrefixCommand.getDefaultPrefix();
 
             // language=SQLite
             statement.execute("CREATE TABLE IF NOT EXISTS guild_settings(" +
@@ -108,7 +108,7 @@ public class SQLiteDataSource implements DatabaseManager {
             e.printStackTrace();
         }
 
-        return SetPrefixCommandInterface.getDefaultPrefix();
+        return SetPrefixCommand.getDefaultPrefix();
     }
 
 

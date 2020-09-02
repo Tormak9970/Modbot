@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.awt.*;
 import java.util.List;
 
 public class UserInfoCommand implements CommandInterface {
@@ -58,7 +59,8 @@ public class UserInfoCommand implements CommandInterface {
                 .setThumbnail(toGetInfo.getAvatarUrl())
                 .addField("General Info", generalInfo, false)
                 .addField("Server Related", memberInfo, false)
-                .setFooter("inDev userInfo")
+                .setColor(new Color(232, 156, 14))
+                .setFooter("Modbot userInfo")
                 ;
 
         event.getChannel().sendMessage(embed.build()).queue();

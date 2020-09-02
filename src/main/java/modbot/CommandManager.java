@@ -1,10 +1,9 @@
 package modbot;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import modbot.commands.CommandContext;
-import modbot.commands.HelpCommandInterface;
+import modbot.commands.HelpCommand;
 import modbot.commands.CommandInterface;
-import modbot.commands.SetPrefixCommandInterface;
+import modbot.commands.SetPrefixCommand;
 import modbot.commands.info.BotInfoCommand;
 import modbot.commands.info.ServerInfoCommand;
 import modbot.commands.info.UserInfoCommand;
@@ -28,8 +27,8 @@ public class CommandManager {
 
     public CommandManager() {
         addCommand(new JoinRolesCommandInterface());
-        addCommand(new SetPrefixCommandInterface());
-        addCommand(new HelpCommandInterface(this));
+        addCommand(new SetPrefixCommand());
+        addCommand(new HelpCommand(this));
         addCommand(new GetBannedWordsCommandInterface());
         addCommand(new BanWordCommandInterface());
         addCommand(new RemoveBannedWord());
@@ -68,10 +67,10 @@ public class CommandManager {
         return null;
     }
 
-    public void handle(GuildMessageReceivedEvent event, EventWaiter waiter) {
+    public void handle(GuildMessageReceivedEvent event) {
         long id = event.getGuild().getIdLong();
         String[] split = event.getMessage().getContentRaw()
-                .replaceFirst("(?i)" + Pattern.quote(SetPrefixCommandInterface.getPrefix(id)), "")
+                .replaceFirst("(?i)" + Pattern.quote(SetPrefixCommand.getPrefix(id)), "")
                 .split("\\s+");
 
         String invoke = split[0].toLowerCase();
@@ -81,7 +80,7 @@ public class CommandManager {
             event.getChannel().sendTyping().queue();
             List<String> args = Arrays.asList(split).subList(1, split.length);
 
-            CommandContext ctx = new CommandContext(event, args, waiter);
+            CommandContext ctx = new CommandContext(event, args);
 
             cmd.handle(ctx);
         }

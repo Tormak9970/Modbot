@@ -58,7 +58,7 @@ public class BotInfoCommand implements CommandInterface {
                 .addField("**Description**", desc, true)
                 .addField("**GitHub**", gitHubUrl, false)
                 .addField("**Want to invite this bot?**", inviteUrl, false)
-                .setColor(new Color(179, 21, 214))
+                .setColor(new Color(232, 156, 14))
                 .setFooter("inDev info")
                 ;
 

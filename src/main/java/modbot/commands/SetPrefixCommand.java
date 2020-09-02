@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SetPrefixCommandInterface implements CommandInterface {
+public class SetPrefixCommand implements CommandInterface {
 
     private static Map<Long, String> prefixes = new HashMap<>();
     private static String defaultPrefix = "$";
@@ -34,8 +34,8 @@ public class SetPrefixCommandInterface implements CommandInterface {
         GuildMessageReceivedEvent event = ctx.getEvent();
         long guildID = event.getGuild().getIdLong();
 
-        updatePrefix(guildID, event.getMessage().getContentRaw().substring(SetPrefixCommandInterface.getPrefix(guildID).length() + 10));
-        channel.sendMessage("prefix has been set to `" + SetPrefixCommandInterface.getPrefix(guildID) + "`").queue();
+        updatePrefix(guildID, event.getMessage().getContentRaw().substring(SetPrefixCommand.getPrefix(guildID).length() + 10));
+        channel.sendMessage("prefix has been set to `" + SetPrefixCommand.getPrefix(guildID) + "`").queue();
     }
 
     @Override

@@ -33,12 +33,8 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        String prefix = SetPrefixCommandInterface.getPrefix(event.getGuild().getIdLong());
+        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         List<String> badWords = GetBannedWordsCommandInterface.getListOfBannedWords(event.getGuild().getIdLong());
-        System.out.println("We received a message from " +
-                event.getAuthor().getName() + ": " +
-                event.getMessage().getContentDisplay()
-        );
 
         if (event.getAuthor().isBot()) {
             return;
@@ -58,7 +54,7 @@ public class Listener extends ListenerAdapter {
         String raw = event.getMessage().getContentRaw();
 
         if (raw.startsWith(prefix)) {
-            manager.handle(event, waiter);
+            manager.handle(event);
         }
     }
 
