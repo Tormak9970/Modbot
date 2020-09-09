@@ -59,7 +59,7 @@ public class BotInfoCommand implements CommandInterface {
                 .addField("**GitHub**", gitHubUrl, false)
                 .addField("**Want to invite this bot?**", inviteUrl, false)
                 .setColor(new Color(232, 156, 14))
-                .setFooter("inDev info")
+                .setFooter("Modbot info")
                 ;
 
         event.getChannel().sendMessage(embed.build()).queue();

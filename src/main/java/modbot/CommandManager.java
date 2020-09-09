@@ -10,10 +10,11 @@ import modbot.commands.info.UserInfoCommand;
 import modbot.commands.moderation.BanCommand;
 import modbot.commands.moderation.KickCommand;
 import modbot.commands.moderation.MuteCommand;
-import modbot.commands.moderation.bannedWords.BanWordCommandInterface;
-import modbot.commands.moderation.bannedWords.GetBannedWordsCommandInterface;
+import modbot.commands.moderation.bannedWords.BanWordCommand;
+import modbot.commands.moderation.bannedWords.GetBannedWordsCommand;
 import modbot.commands.moderation.bannedWords.RemoveBannedWord;
-import modbot.commands.roles.JoinRolesCommandInterface;
+import modbot.commands.roles.JoinRolesCommand;
+import modbot.commands.roles.RemoveJoinRoleCommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;
@@ -26,11 +27,12 @@ public class CommandManager {
     private final List<CommandInterface> commands = new ArrayList<>();
 
     public CommandManager() {
-        addCommand(new JoinRolesCommandInterface());
+        addCommand(new JoinRolesCommand());
+        addCommand(new RemoveJoinRoleCommand());
         addCommand(new SetPrefixCommand());
         addCommand(new HelpCommand(this));
-        addCommand(new GetBannedWordsCommandInterface());
-        addCommand(new BanWordCommandInterface());
+        addCommand(new GetBannedWordsCommand());
+        addCommand(new BanWordCommand());
         addCommand(new RemoveBannedWord());
         addCommand(new MuteCommand());
         addCommand(new BanCommand());

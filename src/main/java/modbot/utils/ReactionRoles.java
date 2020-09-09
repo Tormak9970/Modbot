@@ -4,23 +4,19 @@ package modbot.utils;
 public class ReactionRoles {
 
     private long messageID;
-    private long channel;
-    private Long emote;
-    private long role;
-    private String emoji;
+    private long channelID;
+    private long roleID;
+    private String itemID;
+    private boolean isemote;
+    private int type;
 
-    public ReactionRoles(long mID, long channel, long emote, long role){
-        messageID = mID;
-        this.channel = channel;
-        this.emote = emote;
-        this.role = role;
-    }
-
-    public ReactionRoles(long mID, long channel, String emoji, long role){
-        messageID = mID;
-        this.channel = channel;
-        this.emoji = emoji;
-        this.role = role;
+    public ReactionRoles(long messageID, long channelID, String itemID, long roleID, boolean isemote, int type){
+        this.messageID = messageID;
+        this.channelID = channelID;
+        this.itemID = itemID;
+        this.roleID = roleID;
+        this.isemote = isemote;
+        this.type = type;
     }
 
     public long getMessageID(){
@@ -28,20 +24,20 @@ public class ReactionRoles {
     }
 
     public long getChannelID(){
-        return channel;
+        return channelID;
     }
 
-    public long getEmoteID(){
-        return emote;
-    }
+    public long getRoleID(){ return roleID;}
 
-    public long getRoleID(){ return role;}
-
-    public String getEmoji(){
-        return emoji;
+    public String getItemID(){
+        return itemID;
     }
 
     public boolean isEmote(){
-        return emote != null;
+        return isemote;
+    }
+
+    public int getType() {
+        return type;
     }
 }

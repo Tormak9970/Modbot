@@ -2,15 +2,41 @@ package modbot.commands.moderation.bannedWords;
 
 import modbot.commands.CommandContext;
 import modbot.commands.CommandInterface;
-import modbot.database.DatabaseManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class RemoveBannedWord implements CommandInterface {
+
+    private static void deleteBannedWord(long guildId, String word){
+        GetBannedWordsCommand.listOfWords.get(guildId).remove(word);
+        try {
+            URI uri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost("localhost:8090")
+                    .setPath("/api/v1/modbot/database/bannedwords/" + guildId)
+                    .addParameter("word", word)
+                    .build();
+            CloseableHttpClient client = HttpClientBuilder.create().build();
+            HttpDelete request = new HttpDelete(uri);
+            CloseableHttpResponse response = client.execute(request);
+            client.close();
+            response.close();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void handle(CommandContext ctx) {
@@ -27,7 +53,7 @@ public class RemoveBannedWord implements CommandInterface {
             return;
         }
         GuildMessageReceivedEvent event = ctx.getEvent();
-        DatabaseManager.INSTANCE.removeBannedWord(event.getGuild().getIdLong(), ctx.getArgs().get(0));
+        RemoveBannedWord.deleteBannedWord(event.getGuild().getIdLong(), ctx.getArgs().get(0));
     }
 
     @Override

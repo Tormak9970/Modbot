@@ -1,22 +1,28 @@
 package modbot.utils;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
 
 public abstract class Utils{
 
     //example of restAction
-    public static void sendPrivateMessage(User user, String content)
+    public static void sendPrivateMessage(Member user, String content)
     {
         // notice that we are not placing a semicolon (;) in the callback this time!
-        user.openPrivateChannel().queue( (channel) -> channel.sendMessage(content).queue() );
+
+        user.getUser().openPrivateChannel().queue( (channel) -> channel.sendMessage(content).queue() );
     }
 
     public static void deleteHistory(int numMsg, TextChannel channel){
@@ -36,4 +42,18 @@ public abstract class Utils{
                 numberOfHours, numberOfMinutes, numberOfSeconds);
     }
 
+    public static String convertStreamToString(InputStream is) {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringJoiner sj = new StringJoiner("\n");
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sj.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sj.toString();
+    }
 }

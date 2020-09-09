@@ -1,8 +1,8 @@
 package modbot.commands;
 
 import modbot.CommandManager;
-import modbot.commands.moderation.bannedWords.GetBannedWordsCommandInterface;
-import modbot.commands.roles.JoinRolesCommandInterface;
+import modbot.commands.moderation.bannedWords.GetBannedWordsCommand;
+import modbot.commands.roles.JoinRolesCommand;
 import modbot.commands.roles.ReactionRolesCommand;
 import modbot.utils.ReactionRoles;
 import modbot.utils.Utils;
@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
 
 public class Listener extends ListenerAdapter {
     private final EventWaiter waiter;
@@ -34,7 +36,7 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
-        List<String> badWords = GetBannedWordsCommandInterface.getListOfBannedWords(event.getGuild().getIdLong());
+        List<String> badWords = GetBannedWordsCommand.getListOfBannedWords(event.getGuild().getIdLong());
 
         if (event.getAuthor().isBot()) {
             return;
@@ -52,7 +54,6 @@ public class Listener extends ListenerAdapter {
             }
         }
         String raw = event.getMessage().getContentRaw();
-
         if (raw.startsWith(prefix)) {
             manager.handle(event);
         }
@@ -82,7 +83,7 @@ public class Listener extends ListenerAdapter {
         }
         Guild guild = joinEvent.getGuild();
         long guildID = guild.getIdLong();
-        List<Long> joinRoles = JoinRolesCommandInterface.getListOfJoinRoles(guildID);
+        List<Long> joinRoles = JoinRolesCommand.getListOfJoinRoles(guildID);
 
         if(joinRoles.size() > 0){
             for (Long roleId : joinRoles) {
@@ -104,18 +105,63 @@ public class Listener extends ListenerAdapter {
             for (ReactionRoles reactRole : reactionRoles) {
 
                 if(reactRole.isEmote()){
-                    match = reactRole.getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong();
+                    match = Long.parseLong(reactRole.getItemID()) == reaction.getReactionEmote().getEmote().getIdLong();
                 }else{
-                    match = reactRole.getEmoji().equals(reaction.getReactionEmote().getEmoji());
+                    match = reactRole.getItemID().equals(reaction.getReactionEmote().getEmoji());
                 }
                 if (reactRole.getChannelID() == reaction.getChannel().getIdLong()
                         && reactRole.getMessageID() == reaction.getMessageIdLong()
                         && match) {
-                    guild.addRoleToMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
-                    Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
+                    if (reactRole.getType() == 1){
+                        guild.addRoleToMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
+                        Utils.sendPrivateMessage(reaction.getMember(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
+                    } else if (reactRole.getType() == 2){
+                        guild.removeRoleFromMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
+                        Utils.sendPrivateMessage(reaction.getMember(), "You have lost the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
+                    } else if (reactRole.getType() == 3){
+                        guild.addRoleToMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
+                        Utils.sendPrivateMessage(reaction.getMember(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
+                    }
                 }
             }
         }
 
+    }
+
+    @Override
+    public void onGuildMessageReactionRemove(GuildMessageReactionRemoveEvent reaction){
+        List<ReactionRoles> reactionRoles = ReactionRolesCommand.getListOfReactionRoles(reaction.getGuild().getIdLong());
+
+        Guild guild = reaction.getGuild();
+        boolean match;
+        if(reactionRoles != null && reactionRoles.size() > 0){
+            for (ReactionRoles reactRole : reactionRoles) {
+
+                if(reactRole.isEmote()){
+                    match = Long.parseLong(reactRole.getItemID()) == reaction.getReactionEmote().getEmote().getIdLong();
+                }else{
+                    match = reactRole.getItemID().equals(reaction.getReactionEmote().getEmoji());
+                }
+                if (reactRole.getChannelID() == reaction.getChannel().getIdLong()
+                        && reactRole.getMessageID() == reaction.getMessageIdLong()
+                        && match) {
+                    if (reactRole.getType() == 3){
+                        guild.removeRoleFromMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
+                        Utils.sendPrivateMessage(reaction.getMember(), "You have lost the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
+                    }
+                    reaction.getChannel().retrieveMessageById(reaction.getMessageIdLong()).queue(message -> {
+                        if(reactRole.isEmote()){
+                            if(message.getReactionById(Long.parseLong(reactRole.getItemID())) == null){
+                                ReactionRolesCommand.deleteReactionRoles(reaction.getGuild().getIdLong(), reactRole);
+                            }
+                        } else {
+                            if (message.getReactionByUnicode(reactRole.getItemID()) == null){
+                                ReactionRolesCommand.deleteReactionRoles(reaction.getGuild().getIdLong(), reactRole);
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
 }

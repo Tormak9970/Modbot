@@ -41,7 +41,7 @@ public class ServerInfoCommand implements CommandInterface {
                 .addField("General Info", generalInfo, false)
                 .addField("Role And Member Counts", memberInfo, false)
                 .setColor(new Color(232, 156, 14))
-                .setFooter("EPC serverInfo")
+                .setFooter("Modbot serverInfo")
                 ;
 
         event.getChannel().sendMessage(embed.build()).queue();
