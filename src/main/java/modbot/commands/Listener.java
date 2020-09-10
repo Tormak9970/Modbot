@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Objects;
 
 public class Listener extends ListenerAdapter {
     private final EventWaiter waiter;
@@ -36,7 +35,8 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
+        long guildId = event.getGuild().getIdLong();
+        String prefix = SetPrefixCommand.getPrefix(guildId);
         List<String> badWords = GetBannedWordsCommand.getListOfBannedWords(event.getGuild().getIdLong());
 
         if (event.getAuthor().isBot()) {

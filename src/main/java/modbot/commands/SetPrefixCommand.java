@@ -114,11 +114,5 @@ public class SetPrefixCommand implements CommandInterface {
     public static String getDefaultPrefix(){
         return defaultPrefix;
     }
-    /*
-    public static void updatePrefix(long guildId, String newPrefix) {
-        prefixes.replace(guildId, newPrefix);
-        DatabaseManager.INSTANCE.setPrefix(guildId, newPrefix);
-    }
-     */
 
 }

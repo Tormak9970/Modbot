@@ -4,6 +4,7 @@ import modbot.commands.CommandContext;
 import modbot.commands.HelpCommand;
 import modbot.commands.CommandInterface;
 import modbot.commands.SetPrefixCommand;
+import modbot.commands.customCommands.LoadCustomCommands;
 import modbot.commands.info.BotInfoCommand;
 import modbot.commands.info.ServerInfoCommand;
 import modbot.commands.info.UserInfoCommand;
@@ -15,16 +16,16 @@ import modbot.commands.moderation.bannedWords.GetBannedWordsCommand;
 import modbot.commands.moderation.bannedWords.RemoveBannedWord;
 import modbot.commands.roles.JoinRolesCommand;
 import modbot.commands.roles.RemoveJoinRoleCommand;
+import modbot.utils.CustomCommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class CommandManager {
     private final List<CommandInterface> commands = new ArrayList<>();
+    public static Map<Long, List<CommandInterface>> ccl = new HashMap<>();
 
     public CommandManager() {
         addCommand(new JoinRolesCommand());
@@ -57,10 +58,17 @@ public class CommandManager {
     }
 
     @Nullable
-    public CommandInterface getCommand(String search) {
+    public CommandInterface getCommand(String search, long guildId) {
         String searchLower = search.toLowerCase();
 
         for (CommandInterface cmd : this.commands) {
+            if (cmd.getName().equals(searchLower)) {
+                return cmd;
+            }
+        }
+        ccl.computeIfAbsent(guildId, s -> new ArrayList<>());
+        for (CommandInterface cmd : LoadCustomCommands.LoadCCs(guildId)) {
+            ccl.get(guildId).add(cmd);
             if (cmd.getName().equals(searchLower)) {
                 return cmd;
             }
@@ -76,7 +84,7 @@ public class CommandManager {
                 .split("\\s+");
 
         String invoke = split[0].toLowerCase();
-        CommandInterface cmd = this.getCommand(invoke);
+        CommandInterface cmd = this.getCommand(invoke, id);
 
         if (cmd != null) {
             event.getChannel().sendTyping().queue();
