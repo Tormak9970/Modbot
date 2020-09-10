@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -160,6 +161,21 @@ public class Listener extends ListenerAdapter {
                             }
                         }
                     });
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onGuildMessageReactionRemoveAll(GuildMessageReactionRemoveAllEvent reaction){
+        List<ReactionRoles> reactionRoles = ReactionRolesCommand.getListOfReactionRoles(reaction.getGuild().getIdLong());
+
+        if(reactionRoles != null && reactionRoles.size() > 0){
+            for (ReactionRoles reactRole : reactionRoles) {
+
+                if (reactRole.getChannelID() == reaction.getChannel().getIdLong()
+                        && reactRole.getMessageID() == reaction.getMessageIdLong()) {
+                    ReactionRolesCommand.deleteReactionRoles(reaction.getGuild().getIdLong(), reactRole);
                 }
             }
         }
