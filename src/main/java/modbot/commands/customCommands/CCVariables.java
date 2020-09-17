@@ -2,10 +2,7 @@ package modbot.commands.customCommands;
 
 public enum CCVariables {
     USER("{user}"),
-    MENTION_USER("{@user}"),
-    SERVER("{server}"),
-    CHANNEL("{channel}"),
-    MENTION_ROLE("{&role}"),
+    MENTION_ROLE("{@role:"),
     LINK_CHANNEL("{#channel}"),
     MENTION_EVERYONE("{everyone}"),
     MENTION_HERE("{here}"),
@@ -44,16 +41,16 @@ public enum CCVariables {
     DELETE_COMMAND_MSG("{delete}"),
     DISABLE_BOT_RESPONSE("{silent}"),
     INPUT_PARAM("$N"),
-    CALL_SEPARATE_COMMAND("{$command}"),
     //can be more then 1
-    SET_REQUIRED_ROLE("{require:role}"),
+    SET_REQUIRED_ROLE("{require-role:"),
     //no more then 1
-    SET_REQUIRED_CHANNEL("{require:#channel}"),
-    BLACKLIST_ROLE("{not:role}"),
-    BLACKLIST_CHANNEL("{not:#channel}"),
-    SEND_RESPONSE_IN_CHANNEL("{respond:#channel}"),
-    DM_SPECIFIED_USER("{dm:user}"),
-    LIST_CHOICES("{choose:option1;option2;option3}"),
+    SET_REQUIRED_CHANNEL("{require-channel:"),
+    BLACKLIST_ROLE("{not-role:"),
+    BLACKLIST_CHANNEL("{not-channel:"),
+    COMMAND("{command:"),
+    SEND_RESPONSE_IN_DM("{dm}"),
+    SEND_RESPONSE_IN_CHANNEL("{respond:"),
+    LIST_CHOICES("{choose:"),
     GET_CHOICE("{choice}");
 
     private String optionText;

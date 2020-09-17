@@ -56,6 +56,9 @@ public class CommandManager {
     public List<CommandInterface> getCommandsList(){
         return commands;
     }
+    public List<CommandInterface> getCCommandsList(long guildId){
+        return ccl.get(guildId);
+    }
 
     @Nullable
     public CommandInterface getCommand(String search, long guildId) {

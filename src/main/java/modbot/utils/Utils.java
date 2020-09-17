@@ -3,7 +3,6 @@ package modbot.utils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
@@ -56,4 +57,10 @@ public abstract class Utils{
         }
         return sj.toString();
     }
+
+    public static List<String> parse(String toParse){
+        String[] tr = toParse.split("\\s");
+        return Arrays.asList(tr);
+    }
+
 }
