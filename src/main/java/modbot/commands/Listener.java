@@ -9,6 +9,8 @@ import modbot.utils.Utils;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -16,11 +18,20 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemove
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class Listener extends ListenerAdapter {
@@ -32,6 +43,46 @@ public class Listener extends ListenerAdapter {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
+
+    @Override
+    public void onGuildJoin(GuildJoinEvent event){
+        long id = event.getGuild().getIdLong();
+        try {
+            URI uri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost("localhost:8090")
+                    .setPath("/api/v1/modbot/database/guild/")
+                    .addParameter("id", "" + id)
+                    .build();
+            CloseableHttpClient c = HttpClientBuilder.create().build();
+            HttpPost request = new HttpPost(uri);
+            CloseableHttpResponse res = c.execute(request);
+            c.close();
+            res.close();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onGuildLeave(GuildLeaveEvent event){
+        long id = event.getGuild().getIdLong();
+        try {
+            URI uri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost("localhost:8090")
+                    .setPath("/api/v1/modbot/database/guild/")
+                    .addParameter("id", "" + id)
+                    .build();
+            CloseableHttpClient c = HttpClientBuilder.create().build();
+            HttpDelete request = new HttpDelete(uri);
+            CloseableHttpResponse res = c.execute(request);
+            c.close();
+            res.close();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
