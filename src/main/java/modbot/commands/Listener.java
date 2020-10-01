@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemove
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.utils.cache.SnowflakeCacheView;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
@@ -32,6 +33,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Listener extends ListenerAdapter {
@@ -47,11 +49,12 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onGuildJoin(GuildJoinEvent event){
         long id = event.getGuild().getIdLong();
+        System.out.println("joined");
         try {
             URI uri = new URIBuilder()
                     .setScheme("http")
                     .setHost("localhost:8090")
-                    .setPath("/api/v1/modbot/database/guild/")
+                    .setPath("/api/v1/modbot/database/guilds")
                     .addParameter("id", "" + id)
                     .build();
             CloseableHttpClient c = HttpClientBuilder.create().build();
@@ -71,7 +74,7 @@ public class Listener extends ListenerAdapter {
             URI uri = new URIBuilder()
                     .setScheme("http")
                     .setHost("localhost:8090")
-                    .setPath("/api/v1/modbot/database/guild/")
+                    .setPath("/api/v1/modbot/database/guilds")
                     .addParameter("id", "" + id)
                     .build();
             CloseableHttpClient c = HttpClientBuilder.create().build();
@@ -125,7 +128,25 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event){
         LOGGER.info("{} is ready", event.getJDA().getSelfUser().getAsTag());
-
+        SnowflakeCacheView<Guild> temp = event.getJDA().getGuildCache();
+        List<Long> ids = new ArrayList<>();
+        temp.forEach(g -> ids.add(g.getIdLong()));
+        String idList = Utils.stringifyList(ids);
+        try {
+            URI uri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost("localhost:8090")
+                    .setPath("/api/v1/modbot/database/guildIds")
+                    .addParameter("ids", idList)
+                    .build();
+            CloseableHttpClient c = HttpClientBuilder.create().build();
+            HttpPost request = new HttpPost(uri);
+            CloseableHttpResponse res = c.execute(request);
+            c.close();
+            res.close();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

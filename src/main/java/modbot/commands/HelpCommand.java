@@ -33,14 +33,14 @@ public class HelpCommand implements CommandInterface {
         }
 
         String search = args.get(0);
-        CommandInterface command = manager.getCommand(search);
+        /*CommandInterface command = manager.getCommand(search);
 
         if (command == null) {
             channel.sendMessage("Nothing found for " + search).queue();
             return;
         }
 
-        channel.sendMessage(command.getHelp()).queue();
+        channel.sendMessage(command.getHelp()).queue();*/
     }
 
     @Override

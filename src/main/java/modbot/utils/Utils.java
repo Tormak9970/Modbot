@@ -11,19 +11,21 @@ import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.function.Consumer;
 
 public abstract class Utils{
 
+    public static Map<Long, CustomGuildObj> fullGuilds = new HashMap<>();
+
+    public static void setFullGuilds(Map<Long, CustomGuildObj> guilds){
+        fullGuilds = guilds;
+    }
     //example of restAction
-    public static void sendPrivateMessage(Member user, String content)
-    {
+    public static void sendPrivateMessage(Member user, String content) {
         // notice that we are not placing a semicolon (;) in the callback this time!
 
-        user.getUser().openPrivateChannel().queue( (channel) -> channel.sendMessage(content).queue() );
+        user.getUser().openPrivateChannel().queue((channel) -> channel.sendMessage(content).queue());
     }
 
     public static void deleteHistory(int numMsg, TextChannel channel){
@@ -61,6 +63,12 @@ public abstract class Utils{
     public static List<String> parse(String toParse){
         String[] tr = toParse.split("\\s");
         return Arrays.asList(tr);
+    }
+
+    public static String stringifyList(List<Long> l){
+        StringJoiner j = new StringJoiner(",");
+        l.forEach(i -> j.add("" + i));
+        return j.toString();
     }
 
 }

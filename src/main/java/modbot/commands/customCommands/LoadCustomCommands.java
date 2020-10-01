@@ -27,7 +27,7 @@ public abstract class LoadCustomCommands {
         List<CommandInterface> ccsList = null;
         try {
             CloseableHttpClient client = HttpClientBuilder.create().build();
-            HttpGet request = new HttpGet("http://localhost:8090/api/v1/modbot/database/customcomands/" + guildId);
+            HttpGet request = new HttpGet("http://localhost:8090/api/v1/modbot/database/customcommands/" + guildId);
             CloseableHttpResponse response = client.execute(request);
             String result;
             try {
