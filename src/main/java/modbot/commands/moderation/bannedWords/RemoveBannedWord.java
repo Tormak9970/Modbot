@@ -2,6 +2,7 @@ package modbot.commands.moderation.bannedWords;
 
 import modbot.commands.CommandContext;
 import modbot.commands.CommandInterface;
+import modbot.utils.Utils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -20,7 +21,7 @@ import java.util.List;
 public class RemoveBannedWord implements CommandInterface {
 
     private static void deleteBannedWord(long guildId, String word){
-        GetBannedWordsCommand.listOfWords.get(guildId).remove(word);
+        Utils.fullGuilds.get(guildId).removeBannedWord(word);
         try {
             URI uri = new URIBuilder()
                     .setScheme("http")

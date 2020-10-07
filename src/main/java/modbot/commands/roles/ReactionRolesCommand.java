@@ -8,6 +8,7 @@ import modbot.commands.SetPrefixCommand;
 import modbot.utils.ReactionRoles;
 import modbot.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -59,39 +60,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
         eventWaiter = waiter;
     }
 
-    public static List<ReactionRoles> getListOfReactionRoles(long guildId){
-        return listOfReactionRoles.computeIfAbsent(guildId, ReactionRolesCommand::getReactionRoles);
-    }
-    private static List<ReactionRoles> getReactionRoles(long guildId){
-        List<ReactionRoles> rr = new ArrayList<>();
-        try {
-            CloseableHttpClient client = HttpClientBuilder.create().build();
-            HttpGet request = new HttpGet("http://localhost:8090/api/v1/modbot/database/reactionroles/" + guildId);
-            CloseableHttpResponse response = client.execute(request);
-            String result;
-            try {
-                HttpEntity entity = response.getEntity();
-
-                if (entity != null) {
-
-                    InputStream iStream = entity.getContent();
-                    result = Utils.convertStreamToString(iStream);
-                    Type listType = new TypeToken<List<ReactionRoles>>() {}.getType();
-                    rr = gson.fromJson(result, listType);
-                    iStream.close();
-                }
-            } finally {
-                client.close();
-                response.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return rr;
-    }
-
     private static void postReactionRoles(long guildId, ReactionRoles rr){
-        listOfReactionRoles.computeIfAbsent(guildId, s -> new ArrayList<>()).add(rr);
+        Utils.fullGuilds.get(guildId).addReactionRole(rr);
         try {
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -116,7 +86,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
     }
 
     public static void deleteReactionRoles(long guildId, ReactionRoles rr){
-        listOfReactionRoles.get(guildId).remove(rr);
+        Utils.fullGuilds.get(guildId).removeReactionRole(rr);
         try {
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -147,6 +117,11 @@ public class ReactionRolesCommand extends ListenerAdapter {
         if (e.getAuthor().isBot()) return;
         Message message = e.getMessage();
         String content = message.getContentRaw();
+        if (!e.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+            e.getChannel().sendMessage("You must have the Manage Server permission to use his command").queue();
+            return;
+        }
+
         if (content.equals(SetPrefixCommand.getPrefix(e.getGuild().getIdLong()) + "rr"))
         {
             TextChannel channel = e.getChannel();

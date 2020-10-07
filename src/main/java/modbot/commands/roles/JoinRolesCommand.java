@@ -7,6 +7,7 @@ import modbot.commands.CommandInterface;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import modbot.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.http.HttpEntity;
@@ -32,42 +33,9 @@ import java.util.List;
 import java.util.Map;
 
 public class JoinRolesCommand implements CommandInterface {
-    private static Gson gson = new Gson();
-    public static Map<Long, List<Long>> listOfJoinRoles = new HashMap<>();
-
-    public static List<Long> getListOfJoinRoles(long guildId){
-        return listOfJoinRoles.computeIfAbsent(guildId, JoinRolesCommand::getJoinRolesRequest);
-    }
-
-    private static List<Long> getJoinRolesRequest(long guildId){
-        List<Long> roleIds = new ArrayList<>();
-        try {
-            CloseableHttpClient c = HttpClientBuilder.create().build();
-            HttpGet request = new HttpGet("http://localhost:8090/api/v1/modbot/database/joinroles/" + guildId);
-            CloseableHttpResponse res = c.execute(request);
-            String result;
-            try {
-                HttpEntity entity = res.getEntity();
-
-                if (entity != null){
-                    InputStream iStream = entity.getContent();
-                    result = Utils.convertStreamToString(iStream);
-                    Type listType = new TypeToken<List<Long>>() {}.getType();
-                    roleIds = gson.fromJson(result, listType);
-                    iStream.close();
-                }
-            } finally {
-                c.close();
-                res.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return roleIds;
-    }
 
     private static void postJoinRoles(long guildId, long roleId){
-        listOfJoinRoles.computeIfAbsent(guildId, s -> new ArrayList<>()).add(roleId);
+        Utils.fullGuilds.get(guildId).addJoinRole(roleId);
         try {
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -90,6 +58,11 @@ public class JoinRolesCommand implements CommandInterface {
         GuildMessageReceivedEvent event = ctx.getEvent();
 
         if(event.getMessage().getMentionedRoles().size() > 0){
+            if (!ctx.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                ctx.getChannel().sendMessage("You must have the Manage Server permission to use his command").queue();
+                return;
+            }
+
             long roleID;
             roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();
 

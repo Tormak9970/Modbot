@@ -2,6 +2,7 @@ package modbot.commands.moderation.bannedWords;
 
 import modbot.commands.CommandContext;
 import modbot.commands.CommandInterface;
+import modbot.utils.Utils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -15,13 +16,12 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BanWordCommand implements CommandInterface {
 
     private static void postBannedWord(long guildId, String word){
-        GetBannedWordsCommand.listOfWords.computeIfAbsent(guildId, s -> new ArrayList<>()).add(word);
+        Utils.fullGuilds.get(guildId).addBannedWord(word);
         try {
             URI uri = new URIBuilder()
                     .setScheme("http")

@@ -4,9 +4,11 @@ import modbot.CommandManager;
 import modbot.commands.moderation.bannedWords.GetBannedWordsCommand;
 import modbot.commands.roles.JoinRolesCommand;
 import modbot.commands.roles.ReactionRolesCommand;
+import modbot.utils.CustomGuildObj;
 import modbot.utils.ReactionRoles;
 import modbot.utils.Utils;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -54,7 +56,7 @@ public class Listener extends ListenerAdapter {
             URI uri = new URIBuilder()
                     .setScheme("http")
                     .setHost("localhost:8090")
-                    .setPath("/api/v1/modbot/database/guilds")
+                    .setPath("/api/v1/modbot/database/guild")
                     .addParameter("id", "" + id)
                     .build();
             CloseableHttpClient c = HttpClientBuilder.create().build();
@@ -74,7 +76,7 @@ public class Listener extends ListenerAdapter {
             URI uri = new URIBuilder()
                     .setScheme("http")
                     .setHost("localhost:8090")
-                    .setPath("/api/v1/modbot/database/guilds")
+                    .setPath("/api/v1/modbot/database/guild")
                     .addParameter("id", "" + id)
                     .build();
             CloseableHttpClient c = HttpClientBuilder.create().build();
@@ -110,7 +112,15 @@ public class Listener extends ListenerAdapter {
         }
         String raw = event.getMessage().getContentRaw();
         if (raw.startsWith(prefix)) {
-            manager.handle(event);
+            if (Utils.fullGuilds.get(guildId).isModOnly()){
+                if (event.getMember().hasPermission(Permission.MANAGE_SERVER)){
+                    manager.handle(event);
+                } else {
+                    event.getChannel().sendMessage("You have nether Admin nor the Manage Server permission").queue();
+                }
+            } else {
+                manager.handle(event);
+            }
         }
     }
 
@@ -149,6 +159,7 @@ public class Listener extends ListenerAdapter {
         }
     }
 
+    //onGuildMemberJoin refactored
     @Override
     public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent joinEvent) {
         if (joinEvent.getUser().isBot()){
@@ -156,7 +167,7 @@ public class Listener extends ListenerAdapter {
         }
         Guild guild = joinEvent.getGuild();
         long guildID = guild.getIdLong();
-        List<Long> joinRoles = JoinRolesCommand.getListOfJoinRoles(guildID);
+        List<Long> joinRoles = Utils.fullGuilds.get(guildID).getListOfJoinRoles();
 
         if(joinRoles.size() > 0){
             for (Long roleId : joinRoles) {
@@ -167,7 +178,7 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent reaction) {
-        List<ReactionRoles> reactionRoles = ReactionRolesCommand.getListOfReactionRoles(reaction.getGuild().getIdLong());
+        List<ReactionRoles> reactionRoles = Utils.fullGuilds.get(reaction.getGuild().getIdLong()).getListOfReactionRoles();
         if (reaction.getUser().isBot()){
             return;
         }
@@ -203,7 +214,7 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionRemove(GuildMessageReactionRemoveEvent reaction){
-        List<ReactionRoles> reactionRoles = ReactionRolesCommand.getListOfReactionRoles(reaction.getGuild().getIdLong());
+        List<ReactionRoles> reactionRoles = Utils.fullGuilds.get(reaction.getGuild().getIdLong()).getListOfReactionRoles();
 
         Guild guild = reaction.getGuild();
         boolean match;
@@ -240,7 +251,7 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionRemoveAll(GuildMessageReactionRemoveAllEvent reaction){
-        List<ReactionRoles> reactionRoles = ReactionRolesCommand.getListOfReactionRoles(reaction.getGuild().getIdLong());
+        List<ReactionRoles> reactionRoles = Utils.fullGuilds.get(reaction.getGuild().getIdLong()).getListOfReactionRoles();
 
         if(reactionRoles != null && reactionRoles.size() > 0){
             for (ReactionRoles reactRole : reactionRoles) {

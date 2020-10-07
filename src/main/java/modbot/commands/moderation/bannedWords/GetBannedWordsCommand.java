@@ -22,37 +22,9 @@ import java.util.Map;
 
 public class GetBannedWordsCommand implements CommandInterface {
     private static Gson gson = new Gson();
-    public static Map<Long, List<String>> listOfWords = new HashMap<>();
 
     public static List<String> getListOfBannedWords(long guildId){
-        return listOfWords.computeIfAbsent(guildId, GetBannedWordsCommand::getBannedWordsRequest);
-    }
-
-    private static List<String> getBannedWordsRequest(long guildId){
-        List<String> bannedWords = new ArrayList<>();
-        try {
-            CloseableHttpClient c = HttpClientBuilder.create().build();
-            HttpGet request = new HttpGet("http://localhost:8090/api/v1/modbot/database/bannedwords/" + guildId);
-            CloseableHttpResponse res = c.execute(request);
-            String result;
-            try {
-                HttpEntity entity = res.getEntity();
-
-                if (entity != null){
-                    InputStream iStream = entity.getContent();
-                    result = Utils.convertStreamToString(iStream);
-                    Type listType = new TypeToken<List<String>>() {}.getType();
-                    bannedWords = gson.fromJson(result, listType);
-                    iStream.close();
-                }
-            } finally {
-                c.close();
-                res.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bannedWords;
+        return Utils.fullGuilds.get(guildId).getListOfBannedWords();
     }
 
     @Override

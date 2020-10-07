@@ -93,6 +93,27 @@ public class CustomGuildObj {
         this.removeJoinRole = true;
     }
 
+    public void addJoinRole(long id){
+        this.listOfJoinRoles.add(id);
+    }
+    public void removeJoinRole(long id){
+        this.listOfJoinRoles.remove(id);
+    }
+
+    public void addBannedWord(String word){
+        this.listOfBannedWords.add(word);
+    }
+    public void removeBannedWord(String word){
+        this.listOfBannedWords.remove(word);
+    }
+
+    public void addReactionRole(ReactionRoles rr){
+        this.listOfReactionRoles.add(rr);
+    }
+    public void removeReactionRole(ReactionRoles rr){
+        this.listOfReactionRoles.remove(rr);
+    }
+
     public String getId() {
         return id;
     }

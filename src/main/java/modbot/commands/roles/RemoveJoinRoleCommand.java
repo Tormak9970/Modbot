@@ -2,6 +2,8 @@ package modbot.commands.roles;
 
 import modbot.commands.CommandContext;
 import modbot.commands.CommandInterface;
+import modbot.utils.Utils;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -17,7 +19,7 @@ public class RemoveJoinRoleCommand implements CommandInterface {
 
 
     private static void deleteJoinRoles(long guildId, long roleId){
-        JoinRolesCommand.listOfJoinRoles.get(guildId).remove(roleId);
+        Utils.fullGuilds.get(guildId).removeJoinRole(roleId);
         try {
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -38,7 +40,11 @@ public class RemoveJoinRoleCommand implements CommandInterface {
     @Override
     public void handle(CommandContext ctx) {
         GuildMessageReceivedEvent event = ctx.getEvent();
-        if (JoinRolesCommand.listOfJoinRoles.get(ctx.getGuild().getIdLong()).size() > 0){
+        if (!ctx.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+            ctx.getChannel().sendMessage("You must have the Manage Server permission to use his command").queue();
+            return;
+        }
+        if (Utils.fullGuilds.get(ctx.getGuild().getIdLong()).getListOfJoinRoles().indexOf(ctx.getGuild().getIdLong()) > 0){
             if (event.getMessage().getMentionedRoles().size() > 0){
                 deleteJoinRoles(ctx.getGuild().getIdLong(), event.getMessage().getMentionedRoles().get(0).getIdLong());
             } else {

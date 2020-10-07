@@ -4,7 +4,7 @@ import modbot.commands.CommandContext;
 import modbot.commands.HelpCommand;
 import modbot.commands.CommandInterface;
 import modbot.commands.SetPrefixCommand;
-import modbot.commands.customCommands.LoadCustomCommands;
+import modbot.commands.customCommands.CustomCommandSkeleton;
 import modbot.commands.info.BotInfoCommand;
 import modbot.commands.info.ServerInfoCommand;
 import modbot.commands.info.UserInfoCommand;
@@ -17,6 +17,7 @@ import modbot.commands.moderation.bannedWords.RemoveBannedWord;
 import modbot.commands.roles.JoinRolesCommand;
 import modbot.commands.roles.RemoveJoinRoleCommand;
 import modbot.utils.CustomCommand;
+import modbot.utils.Utils;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;
@@ -60,6 +61,18 @@ public class CommandManager {
         return ccl.get(guildId);
     }
 
+    private static List<CommandInterface> convertCCsToSkeletons(List<CustomCommand> cc, long id){
+        List<CommandInterface> ccsList = new ArrayList<>();
+        for (CustomCommand cmd : cc){
+            boolean nameFound = ccl.get(id).stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmd.getName()));
+            if (!nameFound){
+                ccsList.add(new CustomCommandSkeleton(cmd.getHandle(), cmd.getName(), cmd.getHelp()));
+            }
+        }
+
+        return ccsList;
+    }
+
     @Nullable
     public CommandInterface getCommand(String search, long guildId) {
         String searchLower = search.toLowerCase();
@@ -69,8 +82,8 @@ public class CommandManager {
                 return cmd;
             }
         }
-        ccl.computeIfAbsent(guildId, s -> new ArrayList<>());
-        for (CommandInterface cmd : LoadCustomCommands.LoadCCs(guildId)) {
+        ccl.computeIfAbsent(guildId, s -> convertCCsToSkeletons(Utils.fullGuilds.get(guildId).getListOfCCs(), guildId));
+        for (CommandInterface cmd : ccl.get(guildId)) {
             ccl.get(guildId).add(cmd);
             if (cmd.getName().equals(searchLower)) {
                 return cmd;
