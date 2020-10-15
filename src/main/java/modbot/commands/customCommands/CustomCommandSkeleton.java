@@ -173,6 +173,8 @@ public class CustomCommandSkeleton implements CommandInterface {
                                     args.remove(i);
                                     args.remove(i + 1);
                                     i -= 2;
+                                } else {
+                                    ctx.getChannel().sendMessage("You can't require more then one channel").queue();
                                 }
                             }
                         }
@@ -215,6 +217,7 @@ public class CustomCommandSkeleton implements CommandInterface {
                             }
 
                         }
+                        /*
                         case COMMAND -> {
                             if (args.get(i).equals(this.name)){
                                 sendMsg = false;
@@ -232,6 +235,7 @@ public class CustomCommandSkeleton implements CommandInterface {
                                 }
                             }
                         }
+                         */
                         case SEND_RESPONSE_IN_DM -> {
                             if (!chRes){
                                 if (responseCId == ctx.getChannel().getIdLong()){
@@ -273,19 +277,23 @@ public class CustomCommandSkeleton implements CommandInterface {
                                     if (args.get(i + 3).indexOf(";") == args.get(i + 3).length() - 1){
                                         String c3 = args.get(i + 3).substring(0, args.get(i + 3).length() - 2);
 
-                                        int ranNum = (int)(Math.random() * 3);
-                                        if (ranNum == 1){
-                                            choice = c1;
-                                        } else if (ranNum == 2){
-                                            choice = c2;
+                                        if (choice == null){
+                                            int ranNum = (int)(Math.random() * 3);
+                                            if (ranNum == 1){
+                                                choice = c1;
+                                            } else if (ranNum == 2){
+                                                choice = c2;
+                                            } else {
+                                                choice = c3;
+                                            }
+                                            args.remove(i);
+                                            args.remove(i + 1);
+                                            args.remove(i + 2);
+                                            args.remove(i + 3);
+                                            i -= 4;
                                         } else {
-                                            choice = c3;
+                                            ctx.getChannel().sendMessage("You can't use choice more then once").queue();
                                         }
-                                        args.remove(i);
-                                        args.remove(i + 1);
-                                        args.remove(i + 2);
-                                        args.remove(i + 3);
-                                        i -= 4;
                                     } else {
                                         sendMsg = false;
                                         ctx.getChannel().sendMessage("You cant use " + CCVariables.LIST_CHOICES.toString() + " without 3 choices.").queue();
@@ -397,6 +405,7 @@ public class CustomCommandSkeleton implements CommandInterface {
                                 sendMsg = false;
                             }
                         }
+                        /*
                         case COMMAND -> {
                             if (args.get(i).equals(this.name)){
                                 sendMsg = false;
@@ -414,6 +423,7 @@ public class CustomCommandSkeleton implements CommandInterface {
                                 }
                             }
                         }
+                         */
                         case SEND_RESPONSE_IN_DM -> {
                             if (!chRes){
                                 if (responseCId == ctx.getChannel().getIdLong()){
@@ -455,19 +465,23 @@ public class CustomCommandSkeleton implements CommandInterface {
                                     if (args.get(i + 3).indexOf(";") == args.get(i + 3).length() - 1){
                                         String c3 = args.get(i + 3).substring(0, args.get(i + 3).length() - 2);
 
-                                        int ranNum = (int)(Math.random() * 3);
-                                        if (ranNum == 1){
-                                            choice = c1;
-                                        } else if (ranNum == 2){
-                                            choice = c2;
+                                        if (choice == null){
+                                            int ranNum = (int)(Math.random() * 3);
+                                            if (ranNum == 1){
+                                                choice = c1;
+                                            } else if (ranNum == 2){
+                                                choice = c2;
+                                            } else {
+                                                choice = c3;
+                                            }
+                                            args.remove(i);
+                                            args.remove(i + 1);
+                                            args.remove(i + 2);
+                                            args.remove(i + 3);
+                                            i -= 4;
                                         } else {
-                                            choice = c3;
+                                            ctx.getChannel().sendMessage("You can't use choice more then once").queue();
                                         }
-                                        args.remove(i);
-                                        args.remove(i + 1);
-                                        args.remove(i + 2);
-                                        args.remove(i + 3);
-                                        i -= 4;
                                     } else {
                                         sendMsg = false;
                                         ctx.getChannel().sendMessage("You cant use " + CCVariables.LIST_CHOICES.toString() + " without 3 choices.").queue();

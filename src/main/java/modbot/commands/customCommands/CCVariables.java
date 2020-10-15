@@ -2,8 +2,8 @@ package modbot.commands.customCommands;
 
 public enum CCVariables {
     USER("{user}"),
-    MENTION_ROLE("{@role:"),
-    LINK_CHANNEL("{#channel}"),
+    MENTION_ROLE("{role}"),
+    LINK_CHANNEL("{channel}"),
     MENTION_EVERYONE("{everyone}"),
     MENTION_HERE("{here}"),
 
@@ -36,21 +36,20 @@ public enum CCVariables {
     DATE_AND_TIME_24("{datetime}"),
     DATE_AND_TIME_12("{datetime12}"),
 
-    DISABLE_EVERYONE_MENTION_AS_PARAM("{noeveryone}"),
     OUTPUT_COMMAND_PREFIX("{prefix}"),
     DELETE_COMMAND_MSG("{delete}"),
     DISABLE_BOT_RESPONSE("{silent}"),
     INPUT_PARAM("$N"),
     //can be more then 1
-    SET_REQUIRED_ROLE("{require-role:"),
+    SET_REQUIRED_ROLE("{require-role}:"),
     //no more then 1
-    SET_REQUIRED_CHANNEL("{require-channel:"),
-    BLACKLIST_ROLE("{not-role:"),
-    BLACKLIST_CHANNEL("{not-channel:"),
-    COMMAND("{command:"),
+    SET_REQUIRED_CHANNEL("{require-channel}:"),
+    BLACKLIST_ROLE("{not-role}:"),
+    BLACKLIST_CHANNEL("{not-channel}:"),
+    /*COMMAND("{command}:"),*/
     SEND_RESPONSE_IN_DM("{dm}"),
-    SEND_RESPONSE_IN_CHANNEL("{respond:"),
-    LIST_CHOICES("{choose:"),
+    SEND_RESPONSE_IN_CHANNEL("{respond}:"),
+    LIST_CHOICES("{choose}:"),
     GET_CHOICE("{choice}");
 
     private String optionText;
