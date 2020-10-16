@@ -52,6 +52,7 @@ public abstract class Utils{
                         fullGuilds.put(Long.parseLong(g.getId()), g);
                     }
                 }
+                System.out.println(fullGuilds);
             } finally {
                 client.close();
                 response.close();

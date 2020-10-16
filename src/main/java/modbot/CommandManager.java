@@ -61,11 +61,17 @@ public class CommandManager {
         return ccl.get(guildId);
     }
 
-    private static List<CommandInterface> convertCCsToSkeletons(List<CustomCommand> cc, long id){
+    public static List<CommandInterface> convertCCsToSkeletons(List<CustomCommand> cc, long id){
         List<CommandInterface> ccsList = new ArrayList<>();
-        for (CustomCommand cmd : cc){
-            boolean nameFound = ccl.get(id).stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmd.getName()));
-            if (!nameFound){
+        if (ccl.get(id) != null){
+            for (CustomCommand cmd : cc){
+                boolean nameFound = ccl.get(id).stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmd.getName()));
+                if (!nameFound){
+                    ccsList.add(new CustomCommandSkeleton(cmd.getHandle(), cmd.getName(), cmd.getHelp()));
+                }
+            }
+        } else {
+            for (CustomCommand cmd : cc){
                 ccsList.add(new CustomCommandSkeleton(cmd.getHandle(), cmd.getName(), cmd.getHelp()));
             }
         }
@@ -82,8 +88,11 @@ public class CommandManager {
                 return cmd;
             }
         }
+
+        System.out.println(Utils.fullGuilds.get(guildId).getListOfCCs());
         ccl.computeIfAbsent(guildId, s -> convertCCsToSkeletons(Utils.fullGuilds.get(guildId).getListOfCCs(), guildId));
         for (CommandInterface cmd : ccl.get(guildId)) {
+            System.out.println("msg made it through! (Listener.java:110)");
             ccl.get(guildId).add(cmd);
             if (cmd.getName().equals(searchLower)) {
                 return cmd;
