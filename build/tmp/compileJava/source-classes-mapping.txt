@@ -2,8 +2,9 @@ modbot/commands/SetPrefixCommand.java
  modbot.commands.SetPrefixCommand
 modbot/commands/roles/RemoveJoinRoleCommand.java
  modbot.commands.roles.RemoveJoinRoleCommand
-modbot/commands/moderation/bannedWords/GetBannedWordsCommand.java
- modbot.commands.moderation.bannedWords.GetBannedWordsCommand
+modbot/ModbotMain.java
+ modbot.ModbotMain
+ modbot.ModbotMain$1
 modbot/commands/info/ServerInfoCommand.java
  modbot.commands.info.ServerInfoCommand
 modbot/utils/CustomGuildObj.java
@@ -12,14 +13,14 @@ modbot/commands/moderation/KickCommand.java
  modbot.commands.moderation.KickCommand
 modbot/commands/CommandContext.java
  modbot.commands.CommandContext
-modbot/commands/moderation/MuteCommand.java
- modbot.commands.moderation.MuteCommand
+modbot/commands/Listener.java
+ modbot.commands.Listener
 modbot/commands/moderation/BanCommand.java
  modbot.commands.moderation.BanCommand
 modbot/utils/CustomCommand.java
  modbot.utils.CustomCommand
-modbot/commands/customCommands/CCVariables.java
- modbot.commands.customCommands.CCVariables
+modbot/commands/HelpCommand.java
+ modbot.commands.HelpCommand
 modbot/commands/CommandInterface.java
  modbot.commands.CommandInterface
 modbot/commands/moderation/bannedWords/RemoveBannedWord.java
@@ -39,15 +40,14 @@ modbot/commands/moderation/bannedWords/BanWordCommand.java
 modbot/utils/Utils.java
  modbot.utils.Utils
  modbot.utils.Utils$1
-modbot/commands/HelpCommand.java
- modbot.commands.HelpCommand
-modbot/ModbotMain.java
- modbot.ModbotMain
- modbot.ModbotMain$1
-modbot/commands/Listener.java
- modbot.commands.Listener
 modbot/CommandManager.java
  modbot.CommandManager
+modbot/commands/moderation/bannedWords/GetBannedWordsCommand.java
+ modbot.commands.moderation.bannedWords.GetBannedWordsCommand
+modbot/commands/customCommands/CCVariables.java
+ modbot.commands.customCommands.CCVariables
 modbot/commands/customCommands/CustomCommandSkeleton.java
  modbot.commands.customCommands.CustomCommandSkeleton
  modbot.commands.customCommands.CustomCommandSkeleton$1
+modbot/commands/moderation/MuteCommand.java
+ modbot.commands.moderation.MuteCommand
