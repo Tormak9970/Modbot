@@ -91,6 +91,7 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        System.out.println("Listener.java Line 94: Recieved Message from discord");
         long guildId = event.getGuild().getIdLong();
         String prefix = SetPrefixCommand.getPrefix(guildId);
         List<String> badWords = GetBannedWordsCommand.getListOfBannedWords(event.getGuild().getIdLong());

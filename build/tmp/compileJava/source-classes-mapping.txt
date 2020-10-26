@@ -1,10 +1,9 @@
-modbot/commands/SetPrefixCommand.java
- modbot.commands.SetPrefixCommand
-modbot/commands/roles/RemoveJoinRoleCommand.java
- modbot.commands.roles.RemoveJoinRoleCommand
-modbot/ModbotMain.java
- modbot.ModbotMain
- modbot.ModbotMain$1
+modbot/commands/info/UserInfoCommand.java
+ modbot.commands.info.UserInfoCommand
+modbot/utils/ReactionRoles.java
+ modbot.utils.ReactionRoles
+modbot/commands/moderation/MuteCommand.java
+ modbot.commands.moderation.MuteCommand
 modbot/commands/info/ServerInfoCommand.java
  modbot.commands.info.ServerInfoCommand
 modbot/utils/CustomGuildObj.java
@@ -13,8 +12,8 @@ modbot/commands/moderation/KickCommand.java
  modbot.commands.moderation.KickCommand
 modbot/commands/CommandContext.java
  modbot.commands.CommandContext
-modbot/commands/Listener.java
- modbot.commands.Listener
+modbot/commands/customCommands/CCVariables.java
+ modbot.commands.customCommands.CCVariables
 modbot/commands/moderation/BanCommand.java
  modbot.commands.moderation.BanCommand
 modbot/utils/CustomCommand.java
@@ -23,20 +22,23 @@ modbot/commands/HelpCommand.java
  modbot.commands.HelpCommand
 modbot/commands/CommandInterface.java
  modbot.commands.CommandInterface
-modbot/commands/moderation/bannedWords/RemoveBannedWord.java
- modbot.commands.moderation.bannedWords.RemoveBannedWord
-modbot/commands/info/UserInfoCommand.java
- modbot.commands.info.UserInfoCommand
-modbot/utils/ReactionRoles.java
- modbot.utils.ReactionRoles
 modbot/commands/roles/ReactionRolesCommand.java
  modbot.commands.roles.ReactionRolesCommand
+modbot/commands/SetPrefixCommand.java
+ modbot.commands.SetPrefixCommand
 modbot/commands/roles/JoinRolesCommand.java
  modbot.commands.roles.JoinRolesCommand
+modbot/commands/roles/RemoveJoinRoleCommand.java
+ modbot.commands.roles.RemoveJoinRoleCommand
+modbot/commands/customCommands/CustomCommandSkeleton.java
+ modbot.commands.customCommands.CustomCommandSkeleton
+ modbot.commands.customCommands.CustomCommandSkeleton$1
 modbot/commands/info/BotInfoCommand.java
  modbot.commands.info.BotInfoCommand
 modbot/commands/moderation/bannedWords/BanWordCommand.java
  modbot.commands.moderation.bannedWords.BanWordCommand
+modbot/commands/moderation/bannedWords/RemoveBannedWord.java
+ modbot.commands.moderation.bannedWords.RemoveBannedWord
 modbot/utils/Utils.java
  modbot.utils.Utils
  modbot.utils.Utils$1
@@ -44,10 +46,8 @@ modbot/CommandManager.java
  modbot.CommandManager
 modbot/commands/moderation/bannedWords/GetBannedWordsCommand.java
  modbot.commands.moderation.bannedWords.GetBannedWordsCommand
-modbot/commands/customCommands/CCVariables.java
- modbot.commands.customCommands.CCVariables
-modbot/commands/customCommands/CustomCommandSkeleton.java
- modbot.commands.customCommands.CustomCommandSkeleton
- modbot.commands.customCommands.CustomCommandSkeleton$1
-modbot/commands/moderation/MuteCommand.java
- modbot.commands.moderation.MuteCommand
+modbot/commands/Listener.java
+ modbot.commands.Listener
+modbot/ModbotMain.java
+ modbot.ModbotMain
+ modbot.ModbotMain$1

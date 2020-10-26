@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -20,7 +19,6 @@ import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.Type;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -66,7 +64,7 @@ public abstract class Utils{
     public static void setFullGuilds(Map<Long, CustomGuildObj> guilds){
         fullGuilds = guilds;
     }
-    //example of restAction
+
     public static void sendPrivateMessage(Member user, String content) {
         // notice that we are not placing a semicolon (;) in the callback this time!
 
