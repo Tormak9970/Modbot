@@ -18,8 +18,8 @@ modbot/commands/moderation/BanCommand.java
  modbot.commands.moderation.BanCommand
 modbot/utils/CustomCommand.java
  modbot.utils.CustomCommand
-modbot/commands/HelpCommand.java
- modbot.commands.HelpCommand
+modbot/commands/moderation/bannedWords/GetBannedWordsCommand.java
+ modbot.commands.moderation.bannedWords.GetBannedWordsCommand
 modbot/commands/CommandInterface.java
  modbot.commands.CommandInterface
 modbot/commands/roles/ReactionRolesCommand.java
@@ -42,12 +42,12 @@ modbot/commands/moderation/bannedWords/RemoveBannedWord.java
 modbot/utils/Utils.java
  modbot.utils.Utils
  modbot.utils.Utils$1
-modbot/CommandManager.java
- modbot.CommandManager
-modbot/commands/moderation/bannedWords/GetBannedWordsCommand.java
- modbot.commands.moderation.bannedWords.GetBannedWordsCommand
-modbot/commands/Listener.java
- modbot.commands.Listener
 modbot/ModbotMain.java
  modbot.ModbotMain
  modbot.ModbotMain$1
+modbot/commands/Listener.java
+ modbot.commands.Listener
+modbot/CommandManager.java
+ modbot.CommandManager
+modbot/commands/HelpCommand.java
+ modbot.commands.HelpCommand

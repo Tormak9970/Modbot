@@ -29,9 +29,7 @@ public class ModbotMain {
     private static int versionNum = -1;
 
     private static void run(){
-        System.out.println("ran main line 32");
         int serverDVM = getDVM();
-        System.out.println(serverDVM);
         if (versionNum != serverDVM && serverDVM != -1){
             versionNum = serverDVM;
             Utils.getFullGuilds();
