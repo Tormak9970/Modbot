@@ -122,7 +122,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             return;
         }
 
-        if (content.equals(SetPrefixCommand.getPrefix(e.getGuild().getIdLong()) + "rr"))
+        if (content.equals(SetPrefixCommand.getPrefix(e.getGuild().getIdLong()) + "rr") && !Utils.fullGuilds.get(e.getGuild().getIdLong()).isReactionRole() )
         {
             TextChannel channel = e.getChannel();
             Guild guild = e.getGuild();

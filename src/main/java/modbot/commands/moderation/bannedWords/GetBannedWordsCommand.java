@@ -42,11 +42,11 @@ public class GetBannedWordsCommand implements CommandInterface {
 
     @Override
     public String getName() {
-        return "getBannedWords";
+        return "words";
     }
 
     @Override
     public String getHelp() {
-        return "returns a list of banned words\n" + "Usage: $getBannedWords";
+        return "returns a list of banned words\n" + "Usage: $words";
     }
 }

@@ -53,11 +53,19 @@ public class CustomCommandSkeleton implements CommandInterface {
                 switch (ch) {
                     case USER -> args.set(i, ctx.getMember().getEffectiveName());
                     case MENTION_ROLE -> {
+                        if(args.get(i + 1).equals("$N")){
+                            args.set(i + 1, ctx.getArgs().get(nCounter));
+                            nCounter++;
+                        }
                         args.set(i, ctx.getGuild().getRolesByName(args.get(i + 1), true).get(0).getAsMention());
                         args.remove(i + 1);
                         i--;
                     }
                     case LINK_CHANNEL -> {
+                        if(args.get(i + 1).equals("$N")){
+                            args.set(i + 1, ctx.getArgs().get(nCounter));
+                            nCounter++;
+                        }
                         args.set(i, ctx.getGuild().getTextChannelsByName(args.get(i + 1), true).get(0).getAsMention());
                         args.remove(i + 1);
                         i--;
@@ -85,23 +93,27 @@ public class CustomCommandSkeleton implements CommandInterface {
                     case CHANNEL_NAME -> args.set(i, ctx.getChannel().getName());
                     case CHANNEL_MENTION -> args.set(i, ctx.getChannel().getAsMention());
                     case TIME_24 -> {
-                        Calendar cal = Calendar.getInstance();
-                        args.set(i, "" + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND));
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+                        LocalDateTime now = LocalDateTime.now();
+                        args.set(i, dtf.format(now));
                     }
                     case TIME_12 -> {
-                        Calendar cal = Calendar.getInstance();
-                        args.set(i, "" + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND));
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm:ss a");
+                        LocalDateTime now = LocalDateTime.now();
+                        args.set(i, dtf.format(now));
                     }
                     case DATE -> {
-                        args.set(i, "" + java.time.LocalDate.now());
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("LLLL dd, yyyy");
+                        LocalDateTime now = LocalDateTime.now();
+                        args.set(i, dtf.format(now));
                     }
                     case DATE_AND_TIME_24 -> {
-                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss aa");
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("LLLL dd, yyyy HH:mm:ss");
                         LocalDateTime now = LocalDateTime.now();
                         args.set(i, dtf.format(now));
                     }
                     case DATE_AND_TIME_12 -> {
-                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("LLLL dd, yyyy hh:mm:ss a");
                         LocalDateTime now = LocalDateTime.now();
                         args.set(i, dtf.format(now));
                     }
@@ -214,25 +226,6 @@ public class CustomCommandSkeleton implements CommandInterface {
                         }
 
                     }
-                        /*
-                        case COMMAND -> {
-                            if (args.get(i).equals(this.name)){
-                                sendMsg = false;
-                                ctx.getChannel().sendMessage("Warning! You have triggered a recursive loop. You cant call this command inside of this command").queue();
-                            } else {
-                                CommandManager manager = new CommandManager();
-                                String cmdName = args.get(i);
-                                if (manager.getCommandsList().stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmdName)) || manager.getCCommandsList(ctx.getGuild().getIdLong()).stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmdName))){
-                                    CommandInterface cmd = manager.getCommand(args.get(i), ctx.getGuild().getIdLong());
-                                    CommandContext cx = new CommandContext(ctx.getEvent(), ctx.getArgs());
-                                    cmd.handle(cx);
-                                } else {
-                                    sendMsg = false;
-                                    ctx.getChannel().sendMessage("Requested command does not exist").queue();
-                                }
-                            }
-                        }
-                         */
                     case SEND_RESPONSE_IN_DM -> {
                         if (!chRes){
                             if (responseCId == ctx.getChannel().getIdLong()){

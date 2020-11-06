@@ -17,6 +17,7 @@ import modbot.commands.moderation.bannedWords.RemoveBannedWord;
 import modbot.commands.roles.JoinRolesCommand;
 import modbot.commands.roles.RemoveJoinRoleCommand;
 import modbot.utils.CustomCommand;
+import modbot.utils.CustomGuildObj;
 import modbot.utils.Utils;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -57,9 +58,6 @@ public class CommandManager {
     public List<CommandInterface> getCommandsList(){
         return commands;
     }
-    public List<CommandInterface> getCCommandsList(long guildId){
-        return ccl.get(guildId);
-    }
 
     public static List<CommandInterface> convertCCsToSkeletons(List<CustomCommand> cc, long id){
         List<CommandInterface> ccsList = new ArrayList<>();
@@ -82,9 +80,40 @@ public class CommandManager {
     @Nullable
     public CommandInterface getCommand(String search, long guildId) {
         String searchLower = search.toLowerCase();
+        boolean isAloud = true;
+
+        CustomGuildObj guild = Utils.fullGuilds.get(guildId);
+
+        if (!guild.isSetPrefix() && searchLower.equals("prefix")){
+            isAloud = false;
+        } else if (!guild.isHelp() && searchLower.equals("help")) {
+            isAloud = false;
+        } else if (!guild.isBotInfo() && searchLower.equals("botinfo")) {
+            isAloud = false;
+        } else if (!guild.isServerInfo() && searchLower.equals("serverinfo")) {
+            isAloud = false;
+        } else if (!guild.isUserInfo() && searchLower.equals("userinfo")) {
+            isAloud = false;
+        } else if (!guild.isBanWord() && searchLower.equals("banword")) {
+            isAloud = false;
+        } else if (!guild.isGetBannedWords() && searchLower.equals("words")) {
+            isAloud = false;
+        } else if (!guild.isRemoveBannedWords() && searchLower.equals("removeword")) {
+            isAloud = false;
+        } else if (!guild.isBanUser() && searchLower.equals("ban")) {
+            isAloud = false;
+        } else if (!guild.isKickUser() && searchLower.equals("kick")) {
+            isAloud = false;
+        } else if (!guild.isMuteUser() && searchLower.equals("mute")) {
+            isAloud = false;
+        } else if (!guild.isJoinRole() && searchLower.equals("joinrole")) {
+            isAloud = false;
+        } else if (!guild.isRemoveJoinRole() && searchLower.equals("removejoinrole")) {
+            isAloud = false;
+        }
 
         for (CommandInterface cmd : this.commands) {
-            if (cmd.getName().equals(searchLower)) {
+            if (cmd.getName().equals(searchLower) && isAloud) {
                 return cmd;
             }
         }
@@ -92,7 +121,7 @@ public class CommandManager {
         System.out.println("guild's Custom Commands: " + Utils.fullGuilds.get(guildId).getListOfCCs());
         ccl.computeIfAbsent(guildId, s -> convertCCsToSkeletons(Utils.fullGuilds.get(guildId).getListOfCCs(), guildId));
         for (CommandInterface cmd : ccl.get(guildId)) {
-            System.out.println("msg made it through! (Listener.java:110)");
+            System.out.println("msg made it through! (Listener.java:92)");
             ccl.get(guildId).add(cmd);
             if (cmd.getName().equals(searchLower)) {
                 return cmd;

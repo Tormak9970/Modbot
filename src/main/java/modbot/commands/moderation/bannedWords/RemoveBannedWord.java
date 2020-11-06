@@ -59,11 +59,11 @@ public class RemoveBannedWord implements CommandInterface {
 
     @Override
     public String getName() {
-        return "removebannedword";
+        return "removeword";
     }
 
     @Override
     public String getHelp() {
-        return "removes the specified word from the banned words list\n" + "Usage: $removeBannedWord [word]";
+        return "removes the specified word from the banned words list\n" + "Usage: $removeword [word]";
     }
 }
