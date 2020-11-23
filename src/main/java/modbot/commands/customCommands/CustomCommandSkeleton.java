@@ -1,6 +1,5 @@
 package modbot.commands.customCommands;
 
-import modbot.CommandManager;
 import modbot.commands.CommandContext;
 import modbot.commands.CommandInterface;
 import modbot.commands.SetPrefixCommand;

@@ -37,17 +37,17 @@ modbot/commands/roles/ReactionRolesCommand.java
  modbot.commands.roles.ReactionRolesCommand
 modbot/commands/Listener.java
  modbot.commands.Listener
-modbot/CommandManager.java
- modbot.CommandManager
+modbot/commands/moderation/bannedWords/RemoveBannedWord.java
+ modbot.commands.moderation.bannedWords.RemoveBannedWord
 modbot/commands/moderation/bannedWords/GetBannedWordsCommand.java
  modbot.commands.moderation.bannedWords.GetBannedWordsCommand
 modbot/commands/customCommands/CustomCommandSkeleton.java
  modbot.commands.customCommands.CustomCommandSkeleton
  modbot.commands.customCommands.CustomCommandSkeleton$1
-modbot/commands/HelpCommand.java
- modbot.commands.HelpCommand
 modbot/ModbotMain.java
  modbot.ModbotMain
  modbot.ModbotMain$1
-modbot/commands/moderation/bannedWords/RemoveBannedWord.java
- modbot.commands.moderation.bannedWords.RemoveBannedWord
+modbot/CommandManager.java
+ modbot.CommandManager
+modbot/commands/HelpCommand.java
+ modbot.commands.HelpCommand

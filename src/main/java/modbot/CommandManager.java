@@ -61,6 +61,7 @@ public class CommandManager {
 
     public static List<CommandInterface> convertCCsToSkeletons(List<CustomCommand> cc, long id){
         List<CommandInterface> ccsList = new ArrayList<>();
+
         if (ccl.get(id) != null){
             for (CustomCommand cmd : cc){
                 boolean nameFound = ccl.get(id).stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmd.getName()));
@@ -138,8 +139,8 @@ public class CommandManager {
                 .split("\\s+");
 
         String invoke = split[0].toLowerCase();
-        CommandInterface cmd = this.getCommand(invoke, id);
 
+        CommandInterface cmd = this.getCommand(invoke, id);
         if (cmd != null) {
             event.getChannel().sendTyping().queue();
             List<String> args = Arrays.asList(split).subList(1, split.length);
