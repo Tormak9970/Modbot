@@ -119,10 +119,8 @@ public class CommandManager {
             }
         }
 
-        System.out.println("guild's Custom Commands: " + Utils.fullGuilds.get(guildId).getListOfCCs());
         ccl.computeIfAbsent(guildId, s -> convertCCsToSkeletons(Utils.fullGuilds.get(guildId).getListOfCCs(), guildId));
         for (CommandInterface cmd : ccl.get(guildId)) {
-            System.out.println("msg made it through! (Listener.java:92)");
             ccl.get(guildId).add(cmd);
             if (cmd.getName().equals(searchLower)) {
                 return cmd;
